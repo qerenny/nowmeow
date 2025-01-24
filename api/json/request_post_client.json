@@ -1,0 +1,19 @@
+{
+  "id": 2,
+  "settings": {
+    "clients": [
+      {
+        "id": null,
+        "flow": "xtls-rprx-vision",
+        "email": null,
+        "limitIp": 0,
+        "totalGB": 0,
+        "expiryTime": 0,
+        "enable": true,
+        "tgId": null,
+        "subId": null,
+        "reset": 0
+      }
+    ]
+  }
+}
