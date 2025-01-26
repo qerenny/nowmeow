@@ -6,8 +6,9 @@ from bot.messages import messages
 from bot.bot_init import bot
 from const.const_bot import (
     REFERRALS, REFERRAL_INFO, REFERRAL_LINK, REFERRAL_RULES,
-    LOGGER_PRESET, PHOTO_referral_program, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, BOT_NAME, MAIN_MENU
+    LOGGER_PRESET, PHOTO_referral_program, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, MAIN_MENU
 )
+from utils.config import BOT_TG_ID
 from utils.logging_utils import setup_logger, log_function_call
 
 logger = setup_logger('referrals.handlers', 'bot.log')
@@ -93,7 +94,7 @@ async def referral_link(call):
     chat_id = call.message.chat.id
     
     try:
-        link = f"https://t.me/{BOT_NAME}?start={chat_id}"
+        link = f"https://t.me/{BOT_TG_ID}?start={chat_id}"
         text = messages.get_random_message('referral_link') + f"\n{link}"
         await bot.send_message(chat_id=chat_id, text=text)
         logger.info(f"Referral link sent to user: {link}")
