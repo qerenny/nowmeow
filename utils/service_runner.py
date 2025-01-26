@@ -5,8 +5,11 @@ import signal
 from utils.logging_utils import setup_logger
 from subprocess import Popen
 import psutil
+from utils.logging_utils import setup_logger, log_function_call
 
+logger = setup_logger('service_runner', 'service_runner.log')
 
+@log_function_call(logger)
 class ServiceRunner:
     def __init__(self, script_path: str, service_name: str):
         self.script_path = script_path
@@ -18,7 +21,7 @@ class ServiceRunner:
         # Настраиваем обработчики сигналов
         signal.signal(signal.SIGTERM, self.handle_signal)
         signal.signal(signal.SIGINT, self.handle_signal)
-
+    
     def handle_signal(self, signum, frame):
         """Обработчик сигналов для корректного завершения"""
         self.logger.info(f"Received signal {signum}. Stopping {self.service_name}...")
