@@ -119,6 +119,19 @@ def get_balance(tg_id):
         logger.error(f"Error in get_balance: {str(e)}")
         raise
 
+@log_function_call(logger)
+def get_refferer(tg_id):
+    try:
+        query = "SELECT referrer_tg_id FROM referrals WHERE tg_id = %s"
+        const.const_db.CUR.execute(query, (tg_id,))
+        row = const.const_db.CUR.fetchone()
+        referrer = row[0] if row else None
+        logger.info(f"Referrer for tg_id={tg_id} is {referrer}.")
+        return referrer
+    except Exception as e:
+        logger.error(f"Error in get_refferer: {str(e)}")
+        raise
+
 
 @log_function_call(logger)
 def select_users_by_referrer(referrer_tg_id):

@@ -40,17 +40,8 @@ async def send_start(message):
             logger.error(f"Error parsing referral_code for chat_id={chat_id}: {str(e)}")
             raise
 
-        # Connect to the database
         try:
-            middleware.connection.login_db()
-            exists_in_users = middleware.user.get_user_exists_in_user(chat_id)
-            exists_in_referrals = middleware.referrals.select_user_exists(chat_id)
-        except Exception as e:
-            logger.error(f"Error checking user existence for chat_id={chat_id}: {str(e)}")
-            raise
-
-        try:
-            await referrals_start(message, exists_in_users, exists_in_referrals, referral_code)
+            await referrals_start(message, referral_code)
         except Exception as e:
             logger.error(f"Error during referral processing for chat_id={chat_id}: {str(e)}")
             raise

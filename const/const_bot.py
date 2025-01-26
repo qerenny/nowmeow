@@ -46,8 +46,6 @@ YEAR1 = {'label' : '🎉 1 Год - 1290 РУБ', 'amount' : 1290*100,
 EXPIRED = 0
 LESS_THAN_HOUR = 1
 
-MESSAGE_DELAY = 5  # Delay in seconds between messages
-
 BOT_NAME = 'test_meownow_bot'
 PHOTO_PATH = 'bot/handlers/'
 HANDLERS_JSON_PATH = 'bot/handlers/'

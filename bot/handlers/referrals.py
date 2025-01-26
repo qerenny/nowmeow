@@ -117,13 +117,20 @@ async def referral_rules(call):
         raise
 
 @log_function_call(logger)
-async def referrals_start(message, exists_in_users, exists_in_referrals, referral_code):
+async def referrals_start(message, referral_code):
     """
     Processes referral code usage or updating for a new or existing user.
     """
     username = message.from_user.username
     chat_id = message.chat.id
-
+    try:
+        middleware.connection.login_db()
+        exists_in_users = middleware.user.get_user_exists_in_user(chat_id)
+        exists_in_referrals = middleware.referrals.select_user_exists(chat_id)
+        code_applied = middleware.referrals.get_refferer(chat_id)
+    except Exception as e:
+        logger.error(f"Error checking user existence for chat_id={chat_id}: {str(e)}")
+        raise
     try:
         if not exists_in_users:
             referrer_text = messages.get_random_message('referral_code_used')
@@ -140,7 +147,7 @@ async def referrals_start(message, exists_in_users, exists_in_referrals, referra
                 if approved:
                     code = referral_code[1]
                     
-                    if not exists_in_referrals:
+                    if not exists_in_referrals or (exists_in_referrals and not code_applied):
                         logger.info(f"User does not exist and is using referral code: {code}")
                         try:
                             middleware.referrals.insert_update_referrer(chat_id, code)
