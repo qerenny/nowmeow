@@ -16,10 +16,15 @@ def ensure_referral_record(tg_id, referrer_id):
     """
     logger.info(f"Attempting to ensure referral record for tg_id={tg_id}, referrer_id={referrer_id}.")
 
-    # Check if the referrer_id is the same as tg_id
+    # Check if the referrer_id is the same sas tg_id
     try:
+        if not referrer_id.isdigit():
+            logger.info(f"Invalid referral: referrer_id={referrer_id} in not a digit.")
+            return False
+        
+        referrer_id, tg_id = int(referrer_id), int(tg_id)
         if referrer_id == tg_id:
-            logger.error(f"Invalid referral: tg_id={tg_id} cannot refer themselves as referrer_id={referrer_id}.")
+            logger.info(f"Invalid referral: tg_id={tg_id} cannot refer themselves as referrer_id={referrer_id}.")
             return False
     except Exception as e:
         logger.exception(f"Error comparing tg_id and referrer_id: {str(e)}")
@@ -31,7 +36,7 @@ def ensure_referral_record(tg_id, referrer_id):
         const.const_db.CUR.execute(check_referrer_query, (referrer_id,))
         referrer_exists = const.const_db.CUR.fetchone()
         if not referrer_exists:
-            logger.error(f"Referrer does not exist: referrer_id={referrer_id}.")
+            logger.info(f"Referrer does not exist: referrer_id={referrer_id}.")
             return False
     except Exception as e:
         logger.exception(f"Error checking if referrer exists for referrer_id={referrer_id}: {str(e)}")
@@ -49,7 +54,7 @@ def ensure_referral_record(tg_id, referrer_id):
         const.const_db.CUR.execute(symmetrical_check_query, (tg_id, referrer_id))
         symmetrical_row = const.const_db.CUR.fetchone()
         if symmetrical_row:
-            logger.error(f"Symmetrical referral detected between tg_id={tg_id} and referrer_id={referrer_id}.")
+            logger.info(f"Symmetrical referral detected between tg_id={tg_id} and referrer_id={referrer_id}.")
             return False
     except Exception as e:
         logger.exception(f"Error checking for symmetrical referrals between tg_id={tg_id} and referrer_id={referrer_id}: {str(e)}")

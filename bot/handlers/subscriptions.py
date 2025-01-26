@@ -85,7 +85,7 @@ async def show_subscription_options(call):
         btn_main_menu = types.InlineKeyboardButton(text=MAIN_MENU, callback_data='menu_start')
         markup.add(btn_main_menu)
 
-        await bot.send_photo(chat_id=chat_id, photo=PHOTO_subscriptions, caption=text2, reply_markup=markup)
+        await bot.send_photo(chat_id=chat_id, photo=PHOTO_subscriptions, caption=text2, reply_markup=markup, parse_mode="Markdown")
     except Exception as e:
         logger.error(f"Error in show_subscription_options: {str(e)}")
         raise
