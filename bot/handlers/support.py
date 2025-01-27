@@ -3,8 +3,9 @@ from telebot import types
 from bot.bot_init import bot
 
 from bot.messages import messages
-from const.const_bot import HELP, PHOTO_help, LOGGER_PRESET, MAIN_MENU
+from const.const_bot import HELP, LOGGER_PRESET, MAIN_MENU
 from utils.logging_utils import log_function_call, setup_logger
+from utils.config import PHOTO_help
 
 logger = setup_logger('support', 'bot.log')
 

@@ -9,9 +9,10 @@ from bot.bot_base_fun import expiry_date_view
 from bot.messages import messages
 from const.const_bot import (
     TRIAL, MONTH1, MONTH3, MONTH6, YEAR1, DAY_3_TIMESTAMP,
-    LOGGER_PRESET, PHOTO_subscriptions, MAIN_MENU
+    LOGGER_PRESET, MAIN_MENU
 )
 from utils.logging_utils import log_function_call, setup_logger
+from utils.config import PHOTO_subscriptions
 
 logger = setup_logger('subscriptions', 'bot.log')
 

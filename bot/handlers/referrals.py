@@ -6,9 +6,9 @@ from bot.messages import messages
 from bot.bot_init import bot
 from const.const_bot import (
     REFERRALS, REFERRAL_INFO, REFERRAL_LINK, REFERRAL_RULES,
-    LOGGER_PRESET, PHOTO_referral_program, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, MAIN_MENU
+    LOGGER_PRESET, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, MAIN_MENU
 )
-from utils.config import BOT_TG_ID
+from utils.config import BOT_TG_ID, PHOTO_referral_program
 from utils.logging_utils import setup_logger, log_function_call
 
 logger = setup_logger('referrals.handlers', 'bot.log')
