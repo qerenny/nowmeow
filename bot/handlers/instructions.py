@@ -4,7 +4,7 @@ from bot.bot_init import bot
 from bot.messages import messages
 from const.const_bot import (
     INSTRUCTIONS_ANDROID, INSTRUCTIONS_IOS, INSTRUCTIONS_WINDOWS,
-    INSTRUCTIONS_MACOS, PHOTO_instructions, LOGGER_PRESET, MAIN_MENU
+    INSTRUCTIONS_MACOS, INSTRUCTIONS_NEKOBOX, PHOTO_instructions, LOGGER_PRESET, MAIN_MENU
 )
 from utils.logging_utils import log_function_call, setup_logger
 
@@ -27,9 +27,11 @@ async def show_instructions(message):
         btn_ios = types.InlineKeyboardButton(f'🍎 {INSTRUCTIONS_IOS[0]}', url=INSTRUCTIONS_IOS[1])
         btn_windows = types.InlineKeyboardButton(f'🖥️ {INSTRUCTIONS_WINDOWS[0]}', url=INSTRUCTIONS_WINDOWS[1])
         btn_macos = types.InlineKeyboardButton(f'💻 {INSTRUCTIONS_MACOS[0]}', url=INSTRUCTIONS_MACOS[1])
+        btn_nekobox = types.InlineKeyboardButton(f'📦 {INSTRUCTIONS_NEKOBOX[0]}', url=INSTRUCTIONS_NEKOBOX[1])
 
         markup.row(btn_android, btn_ios)
         markup.row(btn_windows, btn_macos)
+        markup.row(btn_nekobox)
 
         btn_main_menu = types.InlineKeyboardButton(MAIN_MENU, callback_data='menu_start')
         markup.add(btn_main_menu)
