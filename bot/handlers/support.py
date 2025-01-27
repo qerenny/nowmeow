@@ -10,7 +10,6 @@ logger = setup_logger('support', 'bot.log')
 
 
 @log_function_call(logger)
-@bot.message_handler(func=lambda message: message.text in [HELP, 'help'], commands=['help'])
 async def send_support_msg(call):
     """
     Отправка информации о поддержке + кнопка "В главное меню".

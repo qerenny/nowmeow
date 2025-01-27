@@ -104,11 +104,13 @@ async def callback_choose_payment_method(call):
             full_price = user_state.get("full_price")//100
             balance = middleware.referrals.get_balance(chat_id)
             max_bonus_to_pay = full_price - MINMUM_BONUS_PAYMENT
+            if max_bonus_to_pay > balance:
+                max_bonus_to_pay = balance
 
             text = (
-                f"*Минимальная сумма оплаты должна быть >=* `{MINMUM_BONUS_PAYMENT}` руб.\n"
-                f"У вас на счету: `{balance}` мяу-коинов\n\n"
-                f"Вы можете потратить максимум: `{max_bonus_to_pay}` коинов\n"
+                f"├─ *Минимальная сумма оплаты: >=* `{MINMUM_BONUS_PAYMENT}` руб.\n"
+                f"├─ У вас на счету: `{balance}` мяу-коинов\n"
+                f"└─ Можете потратить максимум: `{max_bonus_to_pay}` коинов\n\n"
                 "Введите, сколько бонусов хотите потратить (числом)."
             )
             await bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
