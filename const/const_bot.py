@@ -22,6 +22,8 @@ MACOS = f'MacOS'
 INSTRUCTIONS_MACOS = [MACOS, 'https://telegra.ph/Nastrojka-MacOS-klienta-11-03']
 WINDOWS = f'Windows'
 INSTRUCTIONS_WINDOWS = [WINDOWS, 'https://telegra.ph/Nastrojka-Windows-klienta-11-03']
+NEKOBOX = f'Windows NekoBox'
+INSTRUCTIONS_NEKOBOX = [NEKOBOX, 'https://telegra.ph/Nastrojka-NekoBox-Windows-01-27']
 
 CURRENCY = 'RUB'
 DAY_3_TIMESTAMP = 'day3'
