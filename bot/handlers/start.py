@@ -14,10 +14,11 @@ from bot.bot_init import bot
 from bot.messages import messages
 from const.const_bot import (
     PROFILE, HELP, INSTRUCTIONS, REFERRALS,
-    PHOTO_PATH, LOGGER_PRESET, PHOTO_menu, PAYMENT_STATE, SUBSCRIPTIONS
+    PHOTO_PATH, LOGGER_PRESET, PAYMENT_STATE, SUBSCRIPTIONS
 )
 from utils.logging_utils import log_function_call, setup_logger
 from bot.bot_base_fun import remove_message
+from utils.config import PHOTO_menu
 
 logger = setup_logger('start', 'bot.log')
 

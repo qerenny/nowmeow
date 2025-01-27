@@ -7,9 +7,10 @@ from bot.handlers.subscriptions import show_subscription_options
 from bot.bot_init import bot
 from bot.messages import messages
 from const.const_bot import (
-    SUBSCRIPTIONS, GET_VLESS, PHOTO_my_subscription, LOGGER_PRESET, MAIN_MENU
+    SUBSCRIPTIONS, GET_VLESS, LOGGER_PRESET, MAIN_MENU
 )
 from utils.logging_utils import log_function_call, setup_logger
+from utils.config import PHOTO_my_subscription
 
 logger = setup_logger('profile', 'bot.log')
 

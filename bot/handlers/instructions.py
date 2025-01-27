@@ -4,9 +4,10 @@ from bot.bot_init import bot
 from bot.messages import messages
 from const.const_bot import (
     INSTRUCTIONS_ANDROID, INSTRUCTIONS_IOS, INSTRUCTIONS_WINDOWS,
-    INSTRUCTIONS_MACOS, INSTRUCTIONS_NEKOBOX, PHOTO_instructions, LOGGER_PRESET, MAIN_MENU
+    INSTRUCTIONS_MACOS, INSTRUCTIONS_NEKOBOX, LOGGER_PRESET, MAIN_MENU
 )
 from utils.logging_utils import log_function_call, setup_logger
+from utils.config import PHOTO_instructions
 
 logger = setup_logger('instructions', 'bot.log')
 
