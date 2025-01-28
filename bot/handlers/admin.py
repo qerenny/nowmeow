@@ -107,17 +107,22 @@ async def send_to_everyone_message(message: types.Message):
         return
 
     text = " ".join(args[1:])
-    logger.info(f"Sending message to all users: {text}")
-    users = middleware.user.select_all_users()
+    users = middleware.user.select_all_users()    
+    success_count = 0
     for user in users:
         try:
-            logger.info(f"Sending message to user {user[0]}")
             await bot.send_message(chat_id=user[0], text=text)
+            success_count += 1
         except Exception as e:
-            logger.error(f"Failed to send message to user {user[0]}: {str(e)}")
+            if "Forbidden" in str(e):
+                logger.info(f"Пользователь {user[0]} заблокировал бота.")
+            else:
+                logger.info(f"Ошибка при отправке сообщения пользователю {user[0]}: {e}")
 
-    await bot.send_message(chat_id=message.chat.id, text=f"Сообщение отправлено всем пользователям.\n\n{len(users)}")
-    
+    await bot.send_message(
+        chat_id=message.chat.id,
+        text=f"Сообщение отправлено {success_count} пользователям из {len(users)}."
+    )
     
 @log_function_call(logger)
 @bot.message_handler(commands=['message_active'])
