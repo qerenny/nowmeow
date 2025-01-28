@@ -9,7 +9,7 @@ from const.const_bot import CURRENCY, HANDLERS_JSON_PATH, LOGGER_PRESET, PAYMENT
 from utils import json_fun
 from utils.logging_utils import retry_on_error, log_function_call, setup_logger
 from bot.bot_base_fun import remove_message, expiry_date_view
-from utils.config import BOT_TEST_PROVIDER_TOKEN
+from utils.config import BOT_TEST_PROVIDER_TOKEN, BOT_LIVE_PROVIDER_TOKEN
 
 logger = setup_logger('payments', 'bot.log')
 
@@ -27,7 +27,7 @@ async def buy(message, product):
             message.chat.id,
             title=product['label'],
             description=product['description'],
-            provider_token=BOT_TEST_PROVIDER_TOKEN,
+            provider_token=BOT_LIVE_PROVIDER_TOKEN,
             currency=CURRENCY,
             prices=prices,
             start_parameter='subscription',
