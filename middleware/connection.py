@@ -27,7 +27,7 @@ def login_db():
     """
     try:
         if const.const_db.CONN is None:
-            const.const_db.TUNNEL, const.const_db.CONN, const.const_db.CUR = database.connection.connect_to_db()
+            const.const_db.CONN, const.const_db.CUR = database.connection.connect_to_db()
             logger.info("Successfully connected to database.")
     except Exception as e:
         logger.error(f"Failed to connect to DB: {str(e)}")
@@ -41,7 +41,7 @@ def logout():
     """
     try:
         auth.logout(const.const_db.SESSION)
-        database.connection.disconnect_from_db(const.const_db.CONN, const.const_db.TUNNEL)
+        database.connection.disconnect_from_db(const.const_db.CONN)
         logger.info("Successfully disconnected from all services.")
     except Exception as e:
         logger.error(f"Failed to disconnect: {str(e)}")
