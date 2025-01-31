@@ -6,7 +6,7 @@
         "id": null,
         "flow": "xtls-rprx-vision",
         "email": null,
-        "limitIp": 3,
+        "limitIp": 5,
         "totalGB": 0,
         "expiryTime": 0,
         "enable": true,
