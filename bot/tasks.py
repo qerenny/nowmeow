@@ -15,6 +15,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from bot.bot_init import bot
+from apscheduler.triggers.interval import IntervalTrigger
 
 
 
@@ -141,6 +142,17 @@ def setup_scheduler():
             name="Monthly Referral Bonus",
             replace_existing=True
         )
+        
+        # # Установка триггера: каждые 1 минуту
+        # trigger = IntervalTrigger(minutes=1)
+        
+        # # Добавление задачи в планировщик
+        # scheduler.add_job(
+        #     monthly_referral_bonus,
+        #     trigger=trigger,
+        #     name="Monthly Referral Bonus",
+        #     replace_existing=True
+        # )
 
         # Start scheduler
         scheduler.start()

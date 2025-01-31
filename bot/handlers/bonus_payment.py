@@ -44,7 +44,7 @@ async def prompt_payment_method(call, product):
 
         text = (
             f"{product['label']}\n"
-            f"├─ Цена: `{product['amount'] / 100}` руб.\n"
+            f"├─ Цена: `{product['amount'] // 100}` руб.\n"
             f"└─ На вашем бонусном счёте: `{balance}` коинов.\n\n"
             "Выберите способ оплаты:"
         )
@@ -101,14 +101,16 @@ async def callback_choose_payment_method(call):
         elif call.data == "pay_bonus":
             user_state["state"] = "CHOOSE_BONUS_AMOUNT"
             
-            full_price = user_state.get("full_price")/100
+            full_price = user_state.get("full_price")//100
             balance = middleware.referrals.get_balance(chat_id)
             max_bonus_to_pay = full_price - MINMUM_BONUS_PAYMENT
+            if max_bonus_to_pay > balance:
+                max_bonus_to_pay = balance
 
             text = (
-                f"*Минимальная сумма оплаты должна быть >=* `{MINMUM_BONUS_PAYMENT}` руб.\n"
-                f"У вас на счету: `{balance}` мяу-коинов\n\n"
-                f"Вы можете потратить максимум: `{max_bonus_to_pay}`\n"
+                f"├─ *Минимальная сумма оплаты: >=* `{MINMUM_BONUS_PAYMENT}` руб.\n"
+                f"├─ У вас на счету: `{balance}` мяу-коинов\n"
+                f"└─ Можете потратить максимум: `{max_bonus_to_pay}` коинов\n\n"
                 "Введите, сколько бонусов хотите потратить (числом)."
             )
             await bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
@@ -167,16 +169,16 @@ async def bonus_input_handler(message):
 
         bonus_requested = int(message.text.strip())
         balance = middleware.referrals.get_balance(chat_id)
-        price_to_pay = full_price/100 - bonus_requested
+        price_to_pay = full_price//100 - bonus_requested
+        
+        if bonus_requested > balance:
+            await bot.send_message(chat_id=chat_id, text="У вас недостаточно бонусов. Введите меньшее число.")
+            logger.info(f"User {chat_id} tried to pay more than they have. Requested: {bonus_requested}.")
+            return
 
         if price_to_pay < MINMUM_BONUS_PAYMENT:
             await bot.send_message(chat_id=chat_id, text=f"Минимальная сумма оплаты должна быть >= `{MINMUM_BONUS_PAYMENT}` руб.", parse_mode='Markdown')
             logger.info(f"User {chat_id} tried to pay less than minimum. Minimum: {bonus_requested}.")
-            return
-
-        if bonus_requested > balance:
-            await bot.send_message(chat_id=chat_id, text="У вас недостаточно бонусов. Введите меньшее число.")
-            logger.info(f"User {chat_id} tried to pay more than they have. Requested: {bonus_requested}.")
             return
 
         st["bonus_input"] = bonus_requested

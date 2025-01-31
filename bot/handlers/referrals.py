@@ -6,8 +6,9 @@ from bot.messages import messages
 from bot.bot_init import bot
 from const.const_bot import (
     REFERRALS, REFERRAL_INFO, REFERRAL_LINK, REFERRAL_RULES,
-    LOGGER_PRESET, PHOTO_referral_program, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, BOT_NAME, MAIN_MENU
+    LOGGER_PRESET, MEOW_COINS_REFERRER_BONUS, MEOW_COINS_FIRST_USE_REF_CODE, MAIN_MENU
 )
+from utils.config import BOT_TG_ID, PHOTO_referral_program
 from utils.logging_utils import setup_logger, log_function_call
 
 logger = setup_logger('referrals.handlers', 'bot.log')
@@ -93,9 +94,9 @@ async def referral_link(call):
     chat_id = call.message.chat.id
     
     try:
-        link = f"https://t.me/{BOT_NAME}?start={chat_id}"
-        text = messages.get_random_message('referral_link') + f"\n```{link}```"
-        await bot.send_message(chat_id=chat_id, text=text, parse_mode='Markdown')
+        link = f"https://t.me/{BOT_TG_ID}?start={chat_id}"
+        text = messages.get_random_message('referral_link') + f"\n{link}"
+        await bot.send_message(chat_id=chat_id, text=text)
         logger.info(f"Referral link sent to user: {link}")
     except Exception as e:
         logger.error(f"Error in referral_link: {str(e)}")
@@ -117,13 +118,20 @@ async def referral_rules(call):
         raise
 
 @log_function_call(logger)
-async def referrals_start(message, exists_in_users, exists_in_referrals, referral_code):
+async def referrals_start(message, referral_code):
     """
     Processes referral code usage or updating for a new or existing user.
     """
     username = message.from_user.username
     chat_id = message.chat.id
-
+    try:
+        middleware.connection.login_db()
+        exists_in_users = middleware.user.get_user_exists_in_user(chat_id)
+        exists_in_referrals = middleware.referrals.select_user_exists(chat_id)
+        code_applied = middleware.referrals.get_refferer(chat_id)
+    except Exception as e:
+        logger.error(f"Error checking user existence for chat_id={chat_id}: {str(e)}")
+        raise
     try:
         if not exists_in_users:
             referrer_text = messages.get_random_message('referral_code_used')
@@ -132,7 +140,7 @@ async def referrals_start(message, exists_in_users, exists_in_referrals, referra
             if ref_code_length > 1:
                 # Ensure referral record
                 try:
-                    approved = middleware.referrals.ensure_referral_record(int(chat_id), int(referral_code[1]))
+                    approved = middleware.referrals.ensure_referral_record(chat_id, referral_code[1])
                 except Exception as e:
                     logger.error(f"Unexpected error ensuring referral record for chat_id={chat_id}: {str(e)}")
                     raise
@@ -140,7 +148,7 @@ async def referrals_start(message, exists_in_users, exists_in_referrals, referra
                 if approved:
                     code = referral_code[1]
                     
-                    if not exists_in_referrals:
+                    if not exists_in_referrals or (exists_in_referrals and not code_applied):
                         logger.info(f"User does not exist and is using referral code: {code}")
                         try:
                             middleware.referrals.insert_update_referrer(chat_id, code)
@@ -169,20 +177,16 @@ async def referrals_start(message, exists_in_users, exists_in_referrals, referra
 
                         logger.info(f"Referral code changed to: {code} for chat_id={chat_id}")
 
-                    await bot.send_message(chat_id=code, text=referrer_text)
-                    await bot.send_message(chat_id=chat_id, text=user_text)
+                    await bot.send_message(chat_id=code, text=referrer_text, parse_mode="Markdown")
+                    await bot.send_message(chat_id=chat_id, text=user_text, parse_mode="Markdown")
 
                 else:
+                    await inser_user_referrals(chat_id, exists_in_referrals)
                     user_text = messages.get_random_message('invalid_referral_code')
                     await bot.send_message(chat_id=chat_id, text=user_text)
 
             elif not exists_in_referrals:
-                try:
-                    middleware.referrals.insert_user_referrals(chat_id)
-                    logger.info(f"Inserted user into referrals without a referrer code for chat_id={chat_id}.")
-                except Exception as e:
-                    logger.error(f"Error inserting user into referrals for chat_id={chat_id}: {str(e)}")
-                    raise
+                await inser_user_referrals(chat_id, exists_in_referrals)
             else:
                 logger.info(f"User already exists in referrals table for chat_id={chat_id}.")
 
@@ -192,3 +196,13 @@ async def referrals_start(message, exists_in_users, exists_in_referrals, referra
     except Exception as e:
         logger.error(f"Unhandled error in referrals_start for chat_id={chat_id}: {str(e)}")
         raise
+    
+    
+async def inser_user_referrals(chat_id, exists_in_referrals):
+    if not exists_in_referrals:
+        try:
+            middleware.referrals.insert_user_referrals(chat_id)
+            logger.info(f"Inserted user into referrals without a referrer code for chat_id={chat_id}.")
+        except Exception as e:
+            logger.error(f"Error inserting user into referrals for chat_id={chat_id}: {str(e)}")
+            raise

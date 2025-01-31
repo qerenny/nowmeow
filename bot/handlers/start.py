@@ -14,10 +14,11 @@ from bot.bot_init import bot
 from bot.messages import messages
 from const.const_bot import (
     PROFILE, HELP, INSTRUCTIONS, REFERRALS,
-    PHOTO_PATH, LOGGER_PRESET, PHOTO_menu, PAYMENT_STATE, SUBSCRIPTIONS
+    PHOTO_PATH, LOGGER_PRESET, PAYMENT_STATE, SUBSCRIPTIONS
 )
 from utils.logging_utils import log_function_call, setup_logger
 from bot.bot_base_fun import remove_message
+from utils.config import PHOTO_menu
 
 logger = setup_logger('start', 'bot.log')
 
@@ -40,17 +41,8 @@ async def send_start(message):
             logger.error(f"Error parsing referral_code for chat_id={chat_id}: {str(e)}")
             raise
 
-        # Connect to the database
         try:
-            middleware.connection.login_db()
-            exists_in_users = middleware.user.get_user_exists_in_user(chat_id)
-            exists_in_referrals = middleware.referrals.select_user_exists(chat_id)
-        except Exception as e:
-            logger.error(f"Error checking user existence for chat_id={chat_id}: {str(e)}")
-            raise
-
-        try:
-            await referrals_start(message, exists_in_users, exists_in_referrals, referral_code)
+            await referrals_start(message, referral_code)
         except Exception as e:
             logger.error(f"Error during referral processing for chat_id={chat_id}: {str(e)}")
             raise

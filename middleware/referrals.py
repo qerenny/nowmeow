@@ -96,3 +96,15 @@ def update_balance(tg_id, amount):
         database.referrals.update_balance(tg_id, amount)
     except Exception as e:
         logger.error(f"Error updating balance: {e}")
+        
+@log_function_call(logger)
+def get_refferer(tg_id):
+    """
+    Retrieves the referrer for the given user.
+    """
+    try:
+        if database.referrals.get_refferer(tg_id):
+            return True
+        return False
+    except Exception as e:
+        logger.error(f"Error getting referrer: {e}")

@@ -22,6 +22,8 @@ MACOS = f'MacOS'
 INSTRUCTIONS_MACOS = [MACOS, 'https://telegra.ph/Nastrojka-MacOS-klienta-11-03']
 WINDOWS = f'Windows'
 INSTRUCTIONS_WINDOWS = [WINDOWS, 'https://telegra.ph/Nastrojka-Windows-klienta-11-03']
+NEKOBOX = f'Windows NekoBox'
+INSTRUCTIONS_NEKOBOX = [NEKOBOX, 'https://telegra.ph/Nastrojka-NekoBox-Windows-01-27']
 
 CURRENCY = 'RUB'
 DAY_3_TIMESTAMP = 'day3'
@@ -46,8 +48,6 @@ YEAR1 = {'label' : '🎉 1 Год - 1290 РУБ', 'amount' : 1290*100,
 EXPIRED = 0
 LESS_THAN_HOUR = 1
 
-MESSAGE_DELAY = 5  # Delay in seconds between messages
-
 BOT_NAME = 'test_meownow_bot'
 PHOTO_PATH = 'bot/handlers/'
 HANDLERS_JSON_PATH = 'bot/handlers/'
@@ -55,10 +55,3 @@ API_JSON_PATH = 'api/'
 LOGGER_PRESET = '\n\n{username} -'
 PAYMENT_STATE = {}
 MINMUM_BONUS_PAYMENT = 60
-
-PHOTO_subscriptions = 'AgACAgIAAxkDAAMaZ1tayr_pmYVe0LpBR_w5ei3j1akAAlfnMRuHddhKBcLY8CEuKCMBAAMCAAN3AAM2BA'
-PHOTO_instructions = 'AgACAgIAAxkDAAMGZ1tTx6boCj77bYHoUecTdnDbntgAAhvnMRuHddhK83bQ2M5HKAIBAAMCAAN3AAM2BA'
-PHOTO_menu = 'AgACAgIAAxkDAAMDZ1tSRTRxd_M7iMJyHoqC3AGI0woAAhjnMRuHddhKWR22W4fCakUBAAMCAAN3AAM2BA'
-PHOTO_my_subscription = 'AgACAgIAAxkDAAICZGdpz84TD8nPHONHH9LEnr5PIsdKAALf6DEbDPlQS2pIfwKzLfC9AQADAgADdwADNgQ'
-PHOTO_help = 'AgACAgIAAxkDAAMzZ11IQNAZRj_KTnMXA-Qm6a3RyzkAAj3kMRsyp-lKHAbB3mVdugcBAAMCAAN3AAM2BA'
-PHOTO_referral_program = 'AgACAgIAAxkDAAICZmdpz9CAFiafVErb_R2UQPK3NfMfAALg6DEbDPlQS2234l0GLyQQAQADAgADdwADNgQ'

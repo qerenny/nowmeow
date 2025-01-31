@@ -9,9 +9,10 @@ from bot.bot_base_fun import expiry_date_view
 from bot.messages import messages
 from const.const_bot import (
     TRIAL, MONTH1, MONTH3, MONTH6, YEAR1, DAY_3_TIMESTAMP,
-    LOGGER_PRESET, PHOTO_subscriptions, MAIN_MENU
+    LOGGER_PRESET, MAIN_MENU
 )
 from utils.logging_utils import log_function_call, setup_logger
+from utils.config import PHOTO_subscriptions
 
 logger = setup_logger('subscriptions', 'bot.log')
 
@@ -85,7 +86,7 @@ async def show_subscription_options(call):
         btn_main_menu = types.InlineKeyboardButton(text=MAIN_MENU, callback_data='menu_start')
         markup.add(btn_main_menu)
 
-        await bot.send_photo(chat_id=chat_id, photo=PHOTO_subscriptions, caption=text2, reply_markup=markup)
+        await bot.send_photo(chat_id=chat_id, photo=PHOTO_subscriptions, caption=text2, reply_markup=markup, parse_mode="Markdown")
     except Exception as e:
         logger.error(f"Error in show_subscription_options: {str(e)}")
         raise
